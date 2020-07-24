@@ -1,0 +1,35 @@
+---
+title: "Sample Table 4-1"
+author: "Nancy McKeon"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+library(tidyverse)
+library(readxl)
+library(flextable)
+library(officer)
+```
+
+## R Markdown :)
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars, echo =FALSE}
+
+table4.1 <- read_excel("C:\\Users\\nmckeon\\Documents\\ghg\\Table 4-1 for PY2020_nrm.xlsx")
+
+dt <- table4.1
+
+ft <- flextable(dt, col_keys = c("Sector", "y2018", "y2017", "y2016","y2015", "y2014", "y2005","y1990") )
+ft<- autofit(ft)
+ft
+
+```
