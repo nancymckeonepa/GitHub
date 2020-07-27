@@ -19,24 +19,35 @@ library(officer)
 ## R Markdown :)
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r data, echo =FALSE}
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars, echo =FALSE}
 
 table4.1 <- read_excel("C:\\Users\\nmckeon\\Documents\\ghg\\Table 4-1 for PY2020_nrm.xlsx")
 
 dt <- table4.1
 
-ft <- flextable(dt, col_keys = c("Sector",  "y1990","y2005", "y2018", "y2017", "y2016","y2015", "y2014") )
+ft <- flextable(dt, col_keys = c("Sector",  "y1990","y2005", "y2014", "y2015", "y2016","y2017", "y2018") )
+
+ft <- set_header_labels(ft, Sector = "Sector/Source",
+    y1990 = "1990", y2005 = "2005",
+    y2014 = "2014", y2015 = "2015",y2016 = "2016", y2017 = "2017",y2018 = "2018" )
+
 ft <- colformat_num(x = ft, big.mark = ",", digits = 1, na_str = "missing")
 ft<- autofit(ft)
 ft <- footnote( ft, i = 1, j = 1:3,
             value = as_paragraph(
-              c("+ Indicates values less than 0.5 kt.")
+              c("+ Indicates values less than 0.5 kt.","M (Mixture of gases)","a Small amounts of PFC emissions also result from this source")
             ),
-            ref_symbols = c("a"),
+            ref_symbols = c("a","b","c"),
             part = "header")
+ft <- footnote( ft, i = 1, j = 3:4,
+value = as_paragraph(
+c("Note Totals may not sum due to independent rounding")
+),
+ref_symbols = c("d"),
+part = "header")
+
 ft
+
 
 ```
