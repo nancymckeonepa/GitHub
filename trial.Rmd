@@ -19,14 +19,44 @@ library(officer)
 ## R Markdown :)
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+```{r ggplot, ECHO = FALSE}
+
+###making plot
+long <- read.csv("C:\\Users\\nmckeon\\Documents\\ghg\\long.csv", check.names=FALSE)
+
+long <- na.omit(df)
+long$Sector
+
+longshort <- subset(long, Sector == "CO2" | Sector == "N2O"| Sector == "HFCs" | Sector == "PFCs"| Sector == "SF6"| Sector == "NF3"|Sector == "CH4",
+                    select=c(Sector, value, year))
+
+ggplot(longshort, aes(fill=Sector, y=value, x=year)) +
+    geom_bar(position="stack", stat="identity")
+```
+
 ```{r data, echo =FALSE}
 
 
 table4.1 <- read_excel("C:\\Users\\nmckeon\\Documents\\ghg\\Table 4-1 for PY2020_nrm.xlsx")
 
-dt <- table4.1
+
+ghgi_num_fmt <- function(x) {
+  case_when(
+    abs(x) < .05 ~ "+",
+    TRUE ~ scales::comma(x, accuracy = .01)
+  )
+}
+
+
+dt <- table4.1 %>%
+  mutate_if(is.numeric, ghgi_num_fmt)
 
 ft <- flextable(dt, col_keys = c("Sector",  "y1990","y2005", "y2014", "y2015", "y2016","y2017", "y2018") )
+
+ft <- font(ft, fontname = "Calibri")
+
+ft <- align(ft, i = NULL, j = 1,align = "left", part = "body" )
 
 ft <- set_header_labels(ft, Sector = "Sector/Source",
     y1990 = "1990", y2005 = "2005",
